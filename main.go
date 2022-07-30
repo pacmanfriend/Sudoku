@@ -11,19 +11,37 @@ type sudoku [size][size]int8
 
 type sudokuCheck [size][size]bool
 
-//func generateSudoku() sudoku {
-//	rand.Seed(time.Now().UnixMilli())
-//
-//	s := sudoku{}
-//
-//	for i := 0; i < size; i++ {
-//		for j := 0; j < size; j++ {
-//			//s[i][j] =
-//		}
-//	}
-//
-//	return s
-//}
+func generateSudoku() sudoku {
+	s := sudoku{}
+
+	for i := 0; i < size; i++ {
+		s[0][i] = int8(i + 1)
+	}
+
+	for i := 1; i < size; i++ {
+		start := (s[i-1][0] + 3) % 9
+
+		if i == 3 {
+			start++
+		}
+
+		if i == 6 {
+			start++
+		}
+
+		for j := 0; j < size; j++ {
+			cell := (start + int8(j)) % 9
+
+			if cell == 0 {
+				cell = 9
+			}
+
+			s[i][j] = cell
+		}
+	}
+
+	return s
+}
 
 func (s *sudoku) set(row, col, dig int8) error {
 	if row < 0 || row > size-1 {
@@ -64,7 +82,7 @@ func (s *sudoku) print() {
 }
 
 func main() {
-	a := (7 + 3) % 9
+	newSudoku := generateSudoku()
 
-	fmt.Println(a)
+	newSudoku.print()
 }
