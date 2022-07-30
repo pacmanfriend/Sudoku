@@ -72,7 +72,7 @@ func (s *sudoku) clear(row, col int8) error {
 func (s *sudoku) print() {
 	for i := 0; i < size; i++ {
 		for j := 0; j < size; j++ {
-			fmt.Print(s[i][j])
+			fmt.Printf("%-3v", s[i][j])
 		}
 
 		fmt.Println()
