@@ -55,12 +55,10 @@ func (s *sudoku) transposing() {
 	}
 }
 
-func (s *sudoku) getRandomArea() int {
-	rand.Seed(time.Now().UnixNano())
-
+func (s *sudoku) getRandomArea(a int) int {
 	var area int
 
-	switch rand.Intn(2) {
+	switch a {
 	case 0:
 		area = 0
 	case 1:
@@ -73,7 +71,9 @@ func (s *sudoku) getRandomArea() int {
 }
 
 func (s *sudoku) swapRowsSmall() {
-	area := s.getRandomArea()
+	rand.Seed(time.Now().UnixNano())
+
+	area := s.getRandomArea(rand.Intn(3))
 
 	row1, row2 := rand.Intn(3)+area, rand.Intn(3)+area
 
@@ -83,7 +83,9 @@ func (s *sudoku) swapRowsSmall() {
 }
 
 func (s *sudoku) swapColumnsSmall() {
-	area := s.getRandomArea()
+	rand.Seed(time.Now().UnixNano())
+
+	area := s.getRandomArea(rand.Intn(3))
 
 	col1, col2 := rand.Intn(3)+area, rand.Intn(3)+area
 
@@ -93,16 +95,41 @@ func (s *sudoku) swapColumnsSmall() {
 }
 
 func (s *sudoku) swapRowsArea() {
-	area1, area2 := s.getRandomArea(), s.getRandomArea()
+	rand.Seed(time.Now().UnixNano())
+
+	area1, area2 := s.getRandomArea(rand.Intn(3)), s.getRandomArea(rand.Intn(3))
 
 	if area1 == area2 {
 		return
 	}
 
+	j := 0
+	for j < 3 {
+		for i := 0; i < size; i++ {
+			s[area1+j][i], s[area2+j][i] = s[area2+j][i], s[area1+j][i]
+		}
+
+		j++
+	}
 }
 
 func (s *sudoku) swapColumnsArea() {
+	rand.Seed(time.Now().UnixNano())
 
+	area1, area2 := s.getRandomArea(rand.Intn(3)), s.getRandomArea(rand.Intn(3))
+
+	if area1 == area2 {
+		return
+	}
+
+	j := 0
+	for j < 3 {
+		for i := 0; i < size; i++ {
+			s[i][area1+j], s[i][area2+j] = s[i][area2+j], s[i][area1+j]
+		}
+
+		j++
+	}
 }
 
 func (s *sudoku) set(row, col, dig int8) error {
@@ -147,9 +174,19 @@ func main() {
 	newSudoku := generateSudoku()
 
 	newSudoku.print()
+	i := 0
 
-	//newSudoku.transposing()
-	newSudoku.swapRowsSmall()
+	for i < 9999 {
+		newSudoku.transposing()
+
+		newSudoku.swapRowsSmall()
+		newSudoku.swapColumnsSmall()
+
+		newSudoku.swapRowsArea()
+		newSudoku.swapColumnsArea()
+
+		i++
+	}
 
 	newSudoku.print()
 }
