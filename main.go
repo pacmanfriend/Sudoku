@@ -7,7 +7,10 @@ import (
 	"time"
 )
 
-const size = 9
+const (
+	size     = 9
+	mixCount = 9999
+)
 
 type sudoku [size][size]int8
 
@@ -40,6 +43,20 @@ func generateSudoku() sudoku {
 
 			s[i][j] = cell
 		}
+	}
+
+	i := 0
+
+	for i < mixCount {
+		s.transposing()
+
+		s.swapRowsSmall()
+		s.swapColumnsSmall()
+
+		s.swapRowsArea()
+		s.swapColumnsArea()
+
+		i++
 	}
 
 	return s
@@ -132,7 +149,7 @@ func (s *sudoku) swapColumnsArea() {
 	}
 }
 
-func (s *sudoku) set(row, col, dig int8) error {
+func (s *sudoku) setCell(row, col, dig int8) error {
 	if row < 0 || row > size-1 {
 		return errors.New("row out of boundary")
 	}
@@ -145,7 +162,7 @@ func (s *sudoku) set(row, col, dig int8) error {
 	return nil
 }
 
-func (s *sudoku) clear(row, col int8) error {
+func (s *sudoku) clearCell(row, col int8) error {
 	if row < 0 || row > size-1 {
 		return errors.New("row out of boundary")
 	}
@@ -172,21 +189,6 @@ func (s *sudoku) print() {
 
 func main() {
 	newSudoku := generateSudoku()
-
-	newSudoku.print()
-	i := 0
-
-	for i < 9999 {
-		newSudoku.transposing()
-
-		newSudoku.swapRowsSmall()
-		newSudoku.swapColumnsSmall()
-
-		newSudoku.swapRowsArea()
-		newSudoku.swapColumnsArea()
-
-		i++
-	}
 
 	newSudoku.print()
 }
