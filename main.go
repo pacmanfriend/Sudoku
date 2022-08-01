@@ -52,9 +52,11 @@ func generateSudoku() sudoku {
 
 		s.swapRowsSmall()
 		s.swapColumnsSmall()
+		s.transposing()
 
 		s.swapRowsArea()
 		s.swapColumnsArea()
+		s.transposing()
 
 		i++
 	}
