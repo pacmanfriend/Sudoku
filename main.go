@@ -14,8 +14,6 @@ const (
 
 type sudoku [size][size]int8
 
-type printableSudoku [size][size]rune
-
 type sudokuCheck [size][size]bool
 
 func generateSudoku() sudoku {
@@ -211,7 +209,11 @@ func (s *sudoku) clearCell(row, col int8) error {
 func (s *sudoku) print() {
 	for i := 0; i < size; i++ {
 		for j := 0; j < size; j++ {
-			fmt.Printf("%-3v", s[i][j])
+			if s[i][j] == 0 {
+				fmt.Printf("%-3v", "-")
+			} else {
+				fmt.Printf("%-3v", s[i][j])
+			}
 		}
 
 		fmt.Println()
