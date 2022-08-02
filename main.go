@@ -16,7 +16,7 @@ type sudoku [size][size]int8
 
 type printableSudoku [size][size]rune
 
-//type sudokuCheck [size][size]bool
+type sudokuCheck [size][size]bool
 
 func generateSudoku() sudoku {
 	s := sudoku{}
@@ -82,12 +82,12 @@ func (s *sudoku) mix() {
 
 	for i < mixCount {
 		s.transposing()
-
 		s.swapRowsSmall()
 		s.swapColumnsSmall()
 		s.transposing()
 
 		s.swapRowsArea()
+		s.transposing()
 		s.swapColumnsArea()
 		s.transposing()
 
