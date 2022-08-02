@@ -14,7 +14,9 @@ const (
 
 type sudoku [size][size]int8
 
-type sudokuCheck [size][size]bool
+type printableSudoku [size][size]rune
+
+//type sudokuCheck [size][size]bool
 
 func generateSudoku() sudoku {
 	s := sudoku{}
@@ -45,6 +47,37 @@ func generateSudoku() sudoku {
 		}
 	}
 
+	s.mix()
+
+	return s
+}
+
+func (s *sudoku) selectDifficultyLevel(level int) *sudoku {
+	n := 0.0
+
+	switch level {
+	case 1:
+		n = 0.5
+	case 2:
+		n = 0.65
+	case 3:
+		n = 0.8
+	}
+
+	s2 := s
+
+	cellsCount := int(81 * n)
+
+	rand.Seed(time.Now().UnixNano())
+
+	for i := 0; i < cellsCount; i++ {
+		s2[rand.Intn(9)][rand.Intn(9)] = 0
+	}
+
+	return s2
+}
+
+func (s *sudoku) mix() {
 	i := 0
 
 	for i < mixCount {
@@ -60,8 +93,6 @@ func generateSudoku() sudoku {
 
 		i++
 	}
-
-	return s
 }
 
 func (s *sudoku) transposing() {
@@ -191,6 +222,8 @@ func (s *sudoku) print() {
 
 func main() {
 	newSudoku := generateSudoku()
-
 	newSudoku.print()
+
+	game := newSudoku.selectDifficultyLevel(3)
+	game.print()
 }
